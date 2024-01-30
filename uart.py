@@ -1,19 +1,12 @@
+import struct
 import random
 import serial
-import struct
 import time
 
-uart_port = 'COM11'  # 컴퓨터 UART 포트로 변경하세요
+uart_port = 'COM6'  # 컴퓨터 UART 포트로 변경하세요
 baud_rate = 115200   # 바우드 레이트
 
-# 응답 프로토콜에 따른 데이터 패킷 구성
-stx = 0x02
-cmd = 0x10
-etx = 0x03
-
 # 데이터 패킷 생성 함수
-import struct
-import random
 
 def create_data_packet():
     stx = 0x02
@@ -21,7 +14,7 @@ def create_data_packet():
     pressure = random.randint(0x0000, 0xFFFF)
     water_level = random.randint(0x0000, 0xFFFF)
     humidity = random.randint(0x00, 0x64)
-    battery = random.randint(0x00, 0x07)
+    battery = 0x07
     etx = 0x03
     drive = 0x01
     stop = 0x00
@@ -34,7 +27,7 @@ def create_data_packet():
                humidity ^ battery ^ etx ^ drive ^ stop ^ wh ^ blackout
 
     # 데이터 패킷 구성 및 바이트 패킹
-    data_packet = struct.pack('>B B H H B B B B B B B B', stx, cmd, pressure, water_level, humidity, battery, etx, checksum, drive, stop, wh, blackout)
+    data_packet = struct.pack('>B B H H B B B B B B B B', stx, cmd, pressure, water_level, humidity, battery, drive, stop, wh, blackout, etx, checksum)
     return data_packet
 
 
@@ -46,7 +39,7 @@ def send_data(ser):
         print(f"송신된 데이터 패킷: {data_packet}")
         ser.write(data_packet)
         # 바우드 레이트에 맞춰 데이터 전송 속도 조절
-        time.sleep(len(data_packet) / (baud_rate / 8))
+        #time.sleep(len(data_packet) / (baud_rate / 8))
 
         # 수신 데이터 확인
         if ser.in_waiting > 0:
