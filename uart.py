@@ -10,7 +10,7 @@ baud_rate = 115200   # 바우드 레이트
 
 def create_data_packet():
     stx = 0x02
-    cmd = random.choice([0x10, 0x20])  # 측정 시작(0x10) 또는 측정 종료(0x20) 중 랜덤 선택
+    cmd = 0x10
     pressure = random.randint(0x0000, 0xFFFF)
     water_level = random.randint(0x0000, 0xFFFF)
     humidity = random.randint(0x00, 0x64)
@@ -33,8 +33,8 @@ def create_data_packet():
     return data_packet
 
 # 패킷 생성 및 출력
-data_packet = create_data_packet()
-print(data_packet)
+#data_packet = create_data_packet()
+#print(data_packet)
 
 
 
